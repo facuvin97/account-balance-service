@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 require('dotenv').config();
 
 module.exports = {
   development: {
     username: process.env.DB_USER || 'postgres',
     password: process.env.DB_PASSWORD || null,
-    database: process.env.DB_NAME || 'account_balance_db',
+    database: process.env.DB_NAME || 'account_balance',
     host: process.env.DB_HOST || 'localhost',
     port: Number(process.env.DB_PORT || 5432),
     dialect: 'postgres',
