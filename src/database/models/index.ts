@@ -1,4 +1,8 @@
 import { Sequelize, Options } from 'sequelize';
+import { initAccountModel, Account } from './Account';
+import { initTransferModel, Transfer } from './Transfer';
+import { initLedgerEntryModel, LedgerEntry } from './LedgerEntry';
+import { initIdempotencyKeyModel, IdempotencyKey } from './IdempotencyKey';
 
 const env = process.env.NODE_ENV || 'development';
 
@@ -7,26 +11,34 @@ const config = require('../config/config.js')[env] as Options;
 
 const sequelize = new Sequelize(config);
 
-// Model registry — import and register each model here as you create them.
-// Example:
-//   import { initAccountModel, Account } from './Account';
-//   initAccountModel(sequelize);
+// Initialize models
+initAccountModel(sequelize);
+initTransferModel(sequelize);
+initLedgerEntryModel(sequelize);
+initIdempotencyKeyModel(sequelize);
+
+// Register associations
+const models = { Account, Transfer, LedgerEntry, IdempotencyKey };
+Account.associate(models);
+Transfer.associate(models);
+LedgerEntry.associate(models);
 
 interface DB {
   sequelize: Sequelize;
   Sequelize: typeof Sequelize;
-  // Add model types here as you create them:
-  // Account: typeof Account;
+  Account: typeof Account;
+  Transfer: typeof Transfer;
+  LedgerEntry: typeof LedgerEntry;
+  IdempotencyKey: typeof IdempotencyKey;
 }
 
 const db: DB = {
   sequelize,
   Sequelize,
+  Account,
+  Transfer,
+  LedgerEntry,
+  IdempotencyKey,
 };
-
-// Call associate() on every model that defines it.
-// When you add a model, give it a static `associate(db: DB)` method
-// and invoke it here:
-//   Account.associate?.(db);
 
 export default db;
