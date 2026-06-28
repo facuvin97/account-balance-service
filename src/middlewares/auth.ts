@@ -2,8 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UnauthorizedError } from '../utils/errors';
 
-const JWT_SECRET = process.env.JWT_SECRET!;
-
 interface JwtPayload {
   userId: string;
 }
@@ -16,7 +14,7 @@ export function authenticate(req: Request, _res: Response, next: NextFunction): 
   }
 
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    const payload = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
     req.userId = payload.userId;
     next();
   } catch {
