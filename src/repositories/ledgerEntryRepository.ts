@@ -1,5 +1,6 @@
 import { Transaction } from 'sequelize';
 import { LedgerEntry, LedgerEntryCreationAttributes } from '../database/models/LedgerEntry';
+import { Transfer } from '../database/models/Transfer';
 
 export const ledgerEntryRepository = {
   async create(
@@ -19,6 +20,14 @@ export const ledgerEntryRepository = {
       order: [['createdAt', 'DESC']],
       limit,
       offset,
+      include: [
+        {
+          model: Transfer,
+          as: 'relatedTransfer',
+          attributes: ['memo'],
+          required: false,
+        },
+      ],
     });
   },
 };
