@@ -1,4 +1,4 @@
-import { Transaction } from 'sequelize';
+import { Op, Transaction } from 'sequelize';
 import {
   IdempotencyKey,
   IdempotencyKeyCreationAttributes,
@@ -23,5 +23,24 @@ export const idempotencyKeyRepository = {
     transaction: Transaction,
   ): Promise<void> {
     await IdempotencyKey.update({ status, responseSnapshot }, { where: { id }, transaction });
+  },
+
+  async deleteById(id: string): Promise<void> {
+    await IdempotencyKey.destroy({ where: { id } });
+  },
+
+  async reclaimStale(userId: string, key: string, staleThreshold: Date): Promise<number> {
+    const [affectedCount] = await IdempotencyKey.update(
+      { status: 'processing' },
+      {
+        where: {
+          userId,
+          key,
+          status: 'processing',
+          updatedAt: { [Op.lt]: staleThreshold },
+        },
+      },
+    );
+    return affectedCount;
   },
 };
