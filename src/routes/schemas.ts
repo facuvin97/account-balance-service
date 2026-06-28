@@ -51,6 +51,7 @@ export const ledgerEntriesSchema = {
       .optional()
       .default('20')
       .transform(Number)
-      .pipe(z.number().int().min(1).max(100)),
+      .pipe(z.number().int().min(1))
+      .transform((v) => Math.min(v, 100)),
   }),
 };
