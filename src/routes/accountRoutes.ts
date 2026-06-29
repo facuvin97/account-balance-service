@@ -15,8 +15,16 @@ const router = Router();
 router.use(authenticate);
 
 router.post('/:accountId/deposits', validate(depositSchema), asyncHandler(depositController));
-router.post('/:accountId/withdrawals', validate(withdrawalSchema), asyncHandler(withdrawalController));
+router.post(
+  '/:accountId/withdrawals',
+  validate(withdrawalSchema),
+  asyncHandler(withdrawalController),
+);
 router.get('/:accountId/balance', validate(balanceSchema), asyncHandler(balanceController));
-router.get('/:accountId/ledger-entries', validate(ledgerEntriesSchema), asyncHandler(ledgerEntriesController));
+router.get(
+  '/:accountId/ledger-entries',
+  validate(ledgerEntriesSchema),
+  asyncHandler(ledgerEntriesController),
+);
 
 export default router;

@@ -7,7 +7,7 @@ import { initIdempotencyKeyModel, IdempotencyKey } from './IdempotencyKey';
 const env = process.env.NODE_ENV || 'development';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const config = require('../config/config.js')[env] as Options;
+const config = (require('../config/config.js') as Record<string, Options>)[env];
 
 const sequelize = new Sequelize(config);
 
