@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { UnauthorizedError } from '../utils/errors';
+import { env } from '../config/env';
 
 interface JwtPayload {
   userId: string;
@@ -15,7 +16,7 @@ export function authenticate(req: Request, _res: Response, next: NextFunction): 
 
   try {
     // Pin explícito a HS256 — previene algorithm confusion attacks (alg:none, RS256 con clave pública)
-    const payload = jwt.verify(token, process.env.JWT_SECRET!, {
+    const payload = jwt.verify(token, env.JWT_SECRET, {
       algorithms: ['HS256'],
     }) as JwtPayload;
     // Validación runtime del claim — el cast de TS no garantiza el tipo en producción

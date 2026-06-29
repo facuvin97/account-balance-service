@@ -1,13 +1,14 @@
 import { Options } from 'sequelize';
+import { env } from '../../config/env';
 
 const dbConfig: Options = {
   dialect: 'postgres',
-  host: process.env.DB_HOST ?? 'localhost',
-  port: Number(process.env.DB_PORT ?? 5432),
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  logging: process.env.NODE_ENV === 'development' ? console.log : false,
+  host: env.DB_HOST,
+  port: env.DB_PORT,
+  username: env.DB_USER,
+  password: env.DB_PASSWORD,
+  database: env.DB_NAME,
+  logging: env.NODE_ENV === 'development' ? console.log : false,
 };
 
 export default dbConfig;
