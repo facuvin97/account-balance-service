@@ -54,7 +54,7 @@ export async function reserveIdempotencyKey(
   const staleThreshold = new Date(Date.now() - STALE_THRESHOLD_MS);
 
   if (existing.updatedAt >= staleThreshold) {
-    throw new ConflictError('Operation already in progress');
+    throw new ConflictError('Operation already in progress', { 'Retry-After': '5' });
   }
 
   // UPDATE atómico: solo un caller puede reclamar la key vencida
@@ -73,7 +73,7 @@ export async function reserveIdempotencyKey(
     return { status: 'completed', responseSnapshot: refreshed.responseSnapshot! };
   }
 
-  throw new ConflictError('Operation already in progress');
+  throw new ConflictError('Operation already in progress', { 'Retry-After': '5' });
 }
 
 // Devuelve el resultado cacheado, o re-lanza el error de negocio original

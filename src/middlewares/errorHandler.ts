@@ -3,6 +3,11 @@ import { AppError } from '../utils/errors';
 
 export function errorHandler(err: Error, _req: Request, res: Response, _next: NextFunction): void {
   if (err instanceof AppError) {
+    if (err.headers) {
+      for (const [key, value] of Object.entries(err.headers)) {
+        res.setHeader(key, value);
+      }
+    }
     res.status(err.statusCode).json({
       error: {
         code: err.code,

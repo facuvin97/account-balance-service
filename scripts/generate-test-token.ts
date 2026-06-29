@@ -16,7 +16,7 @@ if (!secret) {
   process.exit(1);
 }
 
-const token = jwt.sign({ userId }, secret, { expiresIn: '7d' });
+const token = jwt.sign({ userId }, secret, { algorithm: 'HS256', expiresIn: '7d' });
 
 console.log(`Token for userId=${userId}:\n`);
 console.log(token);

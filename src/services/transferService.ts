@@ -53,6 +53,7 @@ export async function transfer(
   const { id: idemKeyId } = reservation;
 
   try {
+    // READ COMMITTED + SELECT FOR UPDATE: serialización por row-lock, no por isolation level
     return await db.sequelize.transaction(async (t) => {
       // Orden determinístico de lock por id ascendente para evitar deadlocks
       const [firstId, secondId] =
