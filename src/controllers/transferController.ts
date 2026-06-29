@@ -24,7 +24,7 @@ export async function transferController(
       sourceAccountId,
       destinationAccountId,
       amount,
-      memo,
+      memo ?? null,
       idempotencyKey,
     );
     res.status(201).json(result);
