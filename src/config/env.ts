@@ -11,6 +11,11 @@ const envSchema = z.object({
   DB_PASSWORD: z.string().min(1),
 
   JWT_SECRET: z.string().min(1),
-});
+
+  CORS_ORIGIN: z.string().min(1).optional(),
+}).refine(
+  (data) => data.NODE_ENV !== 'production' || data.CORS_ORIGIN,
+  { message: 'CORS_ORIGIN is required in production', path: ['CORS_ORIGIN'] },
+);
 
 export const env = envSchema.parse(process.env);

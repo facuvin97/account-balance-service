@@ -9,6 +9,20 @@ const dbConfig: Options = {
   password: env.DB_PASSWORD,
   database: env.DB_NAME,
   logging: env.NODE_ENV === 'development' ? console.log : false,
+  pool: {
+    max: 20,
+    min: 5,
+    acquire: 30000,
+    idle: 15000,
+  },
+  ...(env.NODE_ENV === 'production' && {
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+  }),
 };
 
 export default dbConfig;
