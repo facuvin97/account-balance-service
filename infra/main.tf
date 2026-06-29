@@ -88,4 +88,5 @@ module "compute" {
   ssm_db_host_arn = aws_ssm_parameter.db_host.arn
   ssm_db_port_arn = module.secrets.ssm_db_port_arn
   ssm_db_name_arn = module.secrets.ssm_db_name_arn
+  image_tag       = var.image_tag
 }

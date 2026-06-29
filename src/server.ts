@@ -14,7 +14,7 @@ const start = async (): Promise<void> => {
       console.log(`Server running on port ${PORT}`);
     });
   } catch (error) {
-    console.error('Failed to start server:', error);
+    console.error('Failed to start server:', error instanceof Error ? error.message : error);
     process.exit(1);
   }
 };

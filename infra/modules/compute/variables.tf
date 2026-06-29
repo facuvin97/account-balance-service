@@ -71,3 +71,8 @@ variable "ssm_db_port_arn" {
 variable "ssm_db_name_arn" {
   type = string
 }
+
+variable "image_tag" {
+  description = "Container image tag (use git SHA for immutable deploys)"
+  type        = string
+}

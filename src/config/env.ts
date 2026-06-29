@@ -14,10 +14,15 @@ const envSchema = z
     JWT_SECRET: z.string().min(1),
 
     CORS_ORIGIN: z.string().min(1).optional(),
+    DB_SSL_CA: z.string().min(1).optional(),
   })
   .refine((data) => data.NODE_ENV !== 'production' || data.CORS_ORIGIN, {
     message: 'CORS_ORIGIN is required in production',
     path: ['CORS_ORIGIN'],
+  })
+  .refine((data) => data.NODE_ENV !== 'production' || data.DB_SSL_CA, {
+    message: 'DB_SSL_CA is required in production (path to RDS CA bundle)',
+    path: ['DB_SSL_CA'],
   });
 
 export const env = envSchema.parse(process.env);

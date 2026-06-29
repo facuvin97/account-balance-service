@@ -21,6 +21,8 @@ app.use(cookieParser());
 app.use(express.json({ limit: '50kb' }));
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/health', (_req, res) => res.json({ status: 'ok' }));
+
 app.use('/accounts', financialLimiter, accountRoutes);
 app.use('/transfers', financialLimiter, transferRoutes);
 
