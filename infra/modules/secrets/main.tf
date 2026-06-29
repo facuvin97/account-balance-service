@@ -46,9 +46,9 @@ resource "aws_secretsmanager_secret_version" "db_credentials" {
 # Configuración no sensible — visible en la consola, sin costo de Secrets Manager
 
 resource "aws_ssm_parameter" "db_port" {
-  name        = "/${var.project_name}/${var.environment}/db-port"
-  type        = "String"
-  value       = tostring(var.db_port)
+  name  = "/${var.project_name}/${var.environment}/db-port"
+  type  = "String"
+  value = tostring(var.db_port)
 
   tags = {
     Name = "${var.project_name}-${var.environment}-db-port"
@@ -56,9 +56,9 @@ resource "aws_ssm_parameter" "db_port" {
 }
 
 resource "aws_ssm_parameter" "db_name" {
-  name        = "/${var.project_name}/${var.environment}/db-name"
-  type        = "String"
-  value       = var.db_name
+  name  = "/${var.project_name}/${var.environment}/db-name"
+  type  = "String"
+  value = var.db_name
 
   tags = {
     Name = "${var.project_name}-${var.environment}-db-name"

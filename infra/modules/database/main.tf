@@ -48,8 +48,8 @@ resource "aws_db_instance" "main" {
   maintenance_window      = "sun:04:30-sun:05:30"
 
   # Protección contra borrado accidental
-  deletion_protection = true
-  skip_final_snapshot = false
+  deletion_protection       = true
+  skip_final_snapshot       = false
   final_snapshot_identifier = "${var.project_name}-${var.environment}-final-snapshot"
 
   storage_encrypted = true
