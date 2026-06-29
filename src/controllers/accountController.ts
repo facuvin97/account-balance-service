@@ -9,6 +9,7 @@ export async function depositController(req: Request, res: Response, next: NextF
   try {
     const idempotencyKey = req.headers['idempotency-key'] as string | undefined;
     if (!idempotencyKey) throw new ValidationError('Idempotency-Key header is required');
+    if (idempotencyKey.length > 255) throw new ValidationError('Idempotency-Key must be at most 255 characters');
 
     const result = await deposit(req.userId!, req.params.accountId, req.body.amount, idempotencyKey);
     res.status(201).json(result);
@@ -21,6 +22,7 @@ export async function withdrawalController(req: Request, res: Response, next: Ne
   try {
     const idempotencyKey = req.headers['idempotency-key'] as string | undefined;
     if (!idempotencyKey) throw new ValidationError('Idempotency-Key header is required');
+    if (idempotencyKey.length > 255) throw new ValidationError('Idempotency-Key must be at most 255 characters');
 
     const result = await withdraw(req.userId!, req.params.accountId, req.body.amount, idempotencyKey);
     res.status(201).json(result);

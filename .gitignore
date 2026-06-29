@@ -6,3 +6,11 @@ dist/
 npm-debug.log*
 
 .DS_Store
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+crash.*.log

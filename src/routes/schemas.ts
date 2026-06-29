@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
-// Regex: dígitos, punto decimal opcional, máximo 2 decimales
+// Regex: máximo 15 dígitos enteros, punto decimal opcional, máximo 2 decimales
 const amountString = z
   .string()
-  .regex(/^\d+(\.\d{1,2})?$/, 'Must be a positive number with up to 2 decimals')
+  .regex(/^\d{1,15}(\.\d{1,2})?$/, 'Must be a positive number with up to 2 decimals')
   .refine((v) => parseFloat(v) > 0, 'Must be greater than zero');
 
 const uuidParam = z.object({
@@ -45,7 +45,12 @@ export const balanceSchema = {
 export const ledgerEntriesSchema = {
   params: uuidParam,
   query: z.object({
-    page: z.string().optional().default('1').transform(Number).pipe(z.number().int().min(1)),
+    page: z
+      .string()
+      .optional()
+      .default('1')
+      .transform(Number)
+      .pipe(z.number().int().min(1).max(10_000)),
     pageSize: z
       .string()
       .optional()

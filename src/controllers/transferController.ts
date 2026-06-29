@@ -6,6 +6,7 @@ export async function transferController(req: Request, res: Response, next: Next
   try {
     const idempotencyKey = req.headers['idempotency-key'] as string | undefined;
     if (!idempotencyKey) throw new ValidationError('Idempotency-Key header is required');
+    if (idempotencyKey.length > 255) throw new ValidationError('Idempotency-Key must be at most 255 characters');
 
     const { sourceAccountId, destinationAccountId, amount, memo } = req.body;
     const result = await transfer(
