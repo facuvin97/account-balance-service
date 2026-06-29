@@ -71,12 +71,9 @@ cached_balance: {
 
 ---
 
-### [ALTO-4] Transfer Destination Account Has No Ownership Verification
+### [ALTO-4] Transfer Destination Account Has No Ownership Verification — DESCARTADO
 
-**File:** `src/services/transferService.ts`
-**Line(s):** 69-74
-**Description:** The transfer service verifies that the source account belongs to the authenticated user, but does not verify that the destination account exists in any expected context. Any authenticated user can transfer money to any account ID in the system.
-**Risk:** Depends on business rules. If the system is intended to only allow transfers between accounts owned by the same user, this is a critical authorization bypass (IDOR). If cross-user transfers are intended, this is acceptable.
+**Status:** No aplica. El sistema soporta transferencias peer-to-peer (entre usuarios) y entre cuentas propias. La validación de existencia de cuenta destino ya existe (líneas 69-70). No se requiere ownership check en destino.
 **Context:**
 ```typescript
 if (source.userId !== userId) {
