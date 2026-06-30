@@ -34,6 +34,7 @@ export async function deposit(
   const { id: idemKeyId } = reservation;
 
   try {
+    // READ COMMITTED + SELECT FOR UPDATE: serialización por row-lock, no por isolation level
     return await db.sequelize.transaction(async (t) => {
       // Lock pesimista — serializa todas las operaciones sobre esta cuenta
       const account = await accountRepository.findByIdForUpdate(accountId, t);

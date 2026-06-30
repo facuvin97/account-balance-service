@@ -19,7 +19,7 @@ variable "project_name" {
 variable "environment" {
   description = "Entorno de despliegue (dev, staging, prod)"
   type        = string
-  default     = "prod"
+  default     = "production"
 }
 
 # ── Network ──────────────────────────────────────────────────
@@ -92,6 +92,11 @@ variable "desired_count" {
   description = "Cantidad deseada de tareas Fargate — ajustar según carga esperada"
   type        = number
   default     = 2
+}
+
+variable "image_tag" {
+  description = "Tag de la imagen Docker (usar git SHA para deploys inmutables)"
+  type        = string
 }
 
 variable "acm_certificate_arn" {

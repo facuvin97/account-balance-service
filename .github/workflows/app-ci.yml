@@ -2,7 +2,7 @@ name: App CI — Lint + Tests
 
 on:
   push:
-    branches: [main]
+    branches: [main, audit]
   pull_request:
     branches: [main]
 
@@ -11,12 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      NODE_ENV: test
       DB_HOST: localhost
       DB_PORT: 5432
-      DB_NAME_TEST: account_balance_db_test
+      DB_NAME: account_balance_db_test
       DB_USER: postgres
       DB_PASSWORD: postgres
       JWT_SECRET: ci_test_secret
+      CORS_ORIGIN: http://localhost:3000
 
     services:
       postgres:

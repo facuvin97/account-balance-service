@@ -33,6 +33,7 @@ export async function withdraw(
   const { id: idemKeyId } = reservation;
 
   try {
+    // READ COMMITTED + SELECT FOR UPDATE: serialización por row-lock, no por isolation level
     return await db.sequelize.transaction(async (t) => {
       const account = await accountRepository.findByIdForUpdate(accountId, t);
       if (!account) throw new NotFoundError('Account not found');

@@ -21,7 +21,11 @@ export async function reserveIdempotencyKey(
   userId: string,
   key: string,
   fingerprint: string,
+  retries = 3,
 ): Promise<ReserveResult> {
+  if (retries <= 0) {
+    throw new ConflictError('Unable to reserve idempotency key after multiple attempts');
+  }
   // Caso feliz: primera request con esta key
   try {
     const idemKey = await db.sequelize.transaction(async (t) => {
@@ -39,7 +43,7 @@ export async function reserveIdempotencyKey(
   const existing = await idempotencyKeyRepository.findByUserAndKey(userId, key);
   if (!existing) {
     // Fue borrada entre nuestro INSERT y este SELECT (race condition). Reintentar.
-    return reserveIdempotencyKey(userId, key, fingerprint);
+    return reserveIdempotencyKey(userId, key, fingerprint, retries - 1);
   }
 
   if (existing.requestFingerprint !== fingerprint) {
@@ -54,7 +58,7 @@ export async function reserveIdempotencyKey(
   const staleThreshold = new Date(Date.now() - STALE_THRESHOLD_MS);
 
   if (existing.updatedAt >= staleThreshold) {
-    throw new ConflictError('Operation already in progress');
+    throw new ConflictError('Operation already in progress', { 'Retry-After': '5' });
   }
 
   // UPDATE atómico: solo un caller puede reclamar la key vencida
@@ -67,13 +71,13 @@ export async function reserveIdempotencyKey(
   // Otro caller la reclamó o completó — releer para decidir
   const refreshed = await idempotencyKeyRepository.findByUserAndKey(userId, key);
   if (!refreshed) {
-    return reserveIdempotencyKey(userId, key, fingerprint);
+    return reserveIdempotencyKey(userId, key, fingerprint, retries - 1);
   }
   if (refreshed.status === 'completed') {
     return { status: 'completed', responseSnapshot: refreshed.responseSnapshot! };
   }
 
-  throw new ConflictError('Operation already in progress');
+  throw new ConflictError('Operation already in progress', { 'Retry-After': '5' });
 }
 
 // Devuelve el resultado cacheado, o re-lanza el error de negocio original

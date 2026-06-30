@@ -1,11 +1,15 @@
 export class AppError extends Error {
+  public readonly headers?: Record<string, string>;
+
   constructor(
     public readonly statusCode: number,
     public readonly code: string,
     message: string,
+    headers?: Record<string, string>,
   ) {
     super(message);
     this.name = this.constructor.name;
+    this.headers = headers;
   }
 }
 
@@ -34,7 +38,7 @@ export class NotFoundError extends AppError {
 }
 
 export class ConflictError extends AppError {
-  constructor(message: string) {
-    super(409, 'CONFLICT', message);
+  constructor(message: string, headers?: Record<string, string>) {
+    super(409, 'CONFLICT', message, headers);
   }
 }
